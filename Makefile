@@ -1,4 +1,5 @@
 CC = gcc
+MKDIR_P = mkdir -p
 
 # Library name
 LIBRARY_NAME = list
