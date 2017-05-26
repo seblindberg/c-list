@@ -4,8 +4,8 @@
  */
 
 #include <compiler.h>
-#include <s_list_item.h>
-#include <t_list.h>
+#include <list/s_list_item.h>
+#include <list/t_list.h>
 
 #include "helper.h"
 

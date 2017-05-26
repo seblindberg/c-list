@@ -6,9 +6,7 @@
 #include <compiler.h>
 #include <stdarg.h>
 
-#include <s_list_item.h>
-#include <s_list.h>
-#include <t_list.h>
+#include <list.h>
 
 
 /* Constants -------------------------------------+-------------------------- */
