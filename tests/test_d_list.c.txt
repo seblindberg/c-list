@@ -1,0 +1,214 @@
+#include <compiler.h>
+#include <list.h>
+
+void test__empty()
+{
+  list_t list;
+  
+  list__ctor(&list);
+  
+  assert(list__is_empty(&list));
+  assert(list__length(&list) == 0);
+  assert(list__first(&list) == NULL);
+  assert(list__last(&list) == NULL);
+}
+
+void test__push()
+{
+  list_t list;
+  list_item_t item_a;
+  list_item_t item_b;
+  
+  list__ctor(&list);
+  list_item__ctor(&item_a);
+  list_item__ctor(&item_b);
+  
+  list__push(&list, &item_a);
+  
+  /* Item a should be the only item in the list */
+  assert(!list__is_empty(&list));
+  assert(list__first(&list) == &item_a);
+  assert(list__last(&list) == &item_a);
+  
+  list__push(&list, &item_b);
+  
+  /* Item b should now be the last item in the list */
+  assert(list__last(&list) == &item_b);
+  
+  /* Make sure the two items are linked up correctly */
+  assert(list_item__next(&item_a) == &item_b);
+  assert(list_item__prev(&item_b) == &item_a);
+  
+  assert(list_item__list(&item_a) == &list);
+  assert(list_item__list(&item_b) == &list);
+}
+
+void test__unshift(void)
+{
+  list_t list;
+  list_item_t item_a;
+  list_item_t item_b;
+  
+  list__ctor(&list);
+  list_item__ctor(&item_a);
+  list_item__ctor(&item_b);
+  
+  list__unshift(&list, &item_b);
+  
+  /* Item b should be the only item in the list */
+  assert(!list__is_empty(&list));
+  assert(list__first(&list) == &item_b);
+  assert(list__last(&list) == &item_b);
+  
+  list__unshift(&list, &item_a);
+  
+  assert(list__first(&list) == &item_a);
+  
+  assert(list_item__next(&item_a) == &item_b);
+  assert(list_item__prev(&item_b) == &item_a);
+  
+  assert(list_item__list(&item_a) == &list);
+  assert(list_item__list(&item_b) == &list);
+}
+
+void test__pop(void)
+{
+  list_t list;
+  list_item_t item_a;
+  list_item_t item_b;
+  list_item_t *item;
+  
+  list__ctor(&list);
+  list_item__ctor(&item_a);
+  list_item__ctor(&item_b);
+  
+  list__push(&list, &item_a);
+  list__push(&list, &item_b);
+  
+  item = list__pop(&list);
+  
+  assert(item == &item_b);
+  assert(list__last(&list) == &item_a);
+  assert(list_item__next(&item_a) == NULL);
+  
+  assert(list_item__prev(&item_b) == NULL);
+  assert(list_item__next(&item_b) == NULL);
+  assert(!list_item__in_list(&item_b));
+}
+
+void test__shift(void)
+{
+  list_t list;
+  list_item_t item_a;
+  list_item_t item_b;
+  list_item_t *item;
+  
+  list__ctor(&list);
+  list_item__ctor(&item_a);
+  list_item__ctor(&item_b);
+  
+  list__push(&list, &item_a);
+  list__push(&list, &item_b);
+  
+  item = list__shift(&list);
+  
+  assert(item == &item_a);
+  assert(list__first(&list) == &item_b);
+  assert(list_item__prev(&item_b) == NULL);
+  
+  assert(list_item__prev(&item_a) == NULL);
+  assert(list_item__next(&item_a) == NULL);
+  assert(!list_item__in_list(&item_a));
+}
+
+void test__list_length(void)
+{
+  list_t list;
+  list_item_t item_a;
+  list_item_t item_b;
+  
+  list__ctor(&list);
+  list_item__ctor(&item_a);
+  list_item__ctor(&item_b);
+  
+  list__push(&list, &item_b);
+  
+  assert(list__length(&list) == 1);
+  
+  list__unshift(&list, &item_a);
+  
+  assert(list__length(&list) == 2);
+  
+  list__pop(&list);
+  
+  assert(list__length(&list) == 1);
+}
+
+uint8_t insert_handler(list_item_t const *item, list_item_t const *other)
+{
+  return other->value > item->value;
+}
+
+void test__insert_before()
+{
+  list_t list;
+  list_item_t item_a;
+  list_item_t item_b;
+  list_item_t item_c;
+  
+  list__ctor(&list);
+  list_item__ctor(&item_a);
+  list_item__ctor(&item_b);
+  list_item__ctor(&item_c);
+  
+  item_a.value = (void *) 1;
+  item_b.value = (void *) 2;
+  item_c.value = (void *) 3;
+  
+  list__insert_before(&list, &item_b, insert_handler);
+  
+  assert(list__first(&list) == &item_b);
+  
+  list__insert_before(&list, &item_a, insert_handler);
+  
+  assert(list__first(&list) == &item_a);
+  
+  list__insert_before(&list, &item_c, insert_handler);
+  
+  assert(list__last(&list) == &item_c);
+}
+
+void test__include()
+{
+  list_t list;
+  list_item_t item;
+  
+  list__ctor(&list);
+  list_item__ctor(&item);
+  
+  assert(!list__include(&list, &item));
+  
+  list__push(&list, &item);
+  
+  assert(list__include(&list, &item));
+  
+  list__pop(&list);
+  
+  assert(!list__include(&list, &item));
+  assert(list__include(NULL, &item));
+}
+
+int main(int argc, char *argv[]) 
+{
+  test__empty();
+  test__push();
+  test__unshift();
+  test__pop();
+  test__shift();
+  test__list_length();
+  test__insert_before();
+  test__include();
+  
+  
+  return 0;
+}

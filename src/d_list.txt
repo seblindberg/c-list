@@ -1,0 +1,170 @@
+#include <list.h>
+
+/* Private Functions -------------------------------------------------------- */
+
+
+
+/* Function Definitions ----------------------------------------------------- */
+
+void list__ctor(list_t *list) {
+  assert(list != NULL);
+  
+  list->first = NULL;
+}
+
+bool_t list__push(list_t *list, list_item_t *list_item) {
+  assert(list != NULL);
+  assert(list_item != NULL);
+  
+  if (list_item__in_list(list_item)) {
+    //assert(0);
+    return 0;
+  }
+  
+  list_item_t *tail = list__last(list);
+  
+  if (tail == NULL) {
+    // Make sure the list item is not already connected to
+    // something.
+    // assert(list_item->next == NULL);
+    // assert(list_item->prev == list_item);
+    // assert(list_item->list == NULL);
+    
+    list->first = list_item;
+    list_item->list = list;
+    
+    return 1;
+  }
+  
+  list_item__append(tail, list_item);
+  return 1;
+}
+
+bool_t list__unshift(list_t *list, list_item_t *list_item) {
+  assert(list != NULL);
+  assert(list_item != NULL);
+  
+  if (list_item__in_list(list_item)) {
+    //assert(0);
+    return 0;
+  }
+  
+  if (list__is_empty(list)) {
+    // Make sure the list item is not already connected to
+    // something.
+    // assert(list_item->next == NULL);
+    // assert(list_item->prev == list_item);
+    // assert(list_item->list == NULL);
+    
+    list->first = list_item;
+    list_item->list = list;
+    return 1;
+  }
+  
+  list_item__prepend(list->first, list_item);
+  return 1;
+}
+
+bool_t list__delete(list_t *list, list_item_t *list_item)
+{
+  if (list_item->list != list) {
+    //assert(0);
+    return 0;
+  }
+  
+  list_item__delete(list_item);
+  return 1;
+}
+
+
+list_item_t *list__pop(list_t *list) {
+  assert(list != NULL);
+  
+  list_item_t *tail = list__last(list);
+  
+  if (tail == NULL) {
+    return NULL;
+  }
+  
+  list_item__delete(tail);
+  return tail;
+}
+
+list_item_t *list__shift(list_t *list) {
+  assert(list != NULL);
+  
+  list_item_t *head = list__first(list);
+  
+  if (head == NULL) {
+    return NULL;
+  }
+  
+  list_item__delete(head);
+  return head;
+}
+
+
+void list__insert_before(list_t *list, list_item_t *list_item,
+                         list_insert_handler_t handler)
+{
+  assert(list != NULL);
+  assert(list_item != NULL);
+  assert(handler != NULL);
+  
+  list_item_t *item = list__first(list);
+      
+  while (item != NULL) {
+    if (handler(list_item, item)) {
+      list_item__prepend(item, list_item);
+      return;
+    }
+    /* Move to the next item */
+    item = item->next;
+  };
+  
+  list__push(list, list_item);
+}
+
+uint8_t list__is_empty(list_t const *list)
+{
+  assert(list != NULL);
+  
+  return list->first == NULL;
+}
+
+uint8_t list__include(list_t const *list, list_item_t const *list_item)
+{
+  assert(list_item != NULL);
+  
+  return list_item->list == list;
+}
+
+size_t list__length(list_t const *list)
+{
+  assert(list != NULL);
+  list_item_t *item;
+  size_t count = 0;
+  
+  item = list__first(list);
+  
+  while (item != NULL) {
+    ++count;
+    item = list_item__next(item);
+  }
+
+  return count;
+}
+
+list_item_t *list__first(list_t const *list) {
+  return list->first;
+}
+
+list_item_t *list__last(list_t const *list) {
+  list_item_t *first = list__first(list);
+  
+  if (first == NULL) {
+    return NULL;
+  }
+  
+  return first->prev;
+}
