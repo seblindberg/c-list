@@ -35,19 +35,32 @@ typedef struct t_list {
 
 void
   t_list__ctor(t_list_t *list);
-  
+
+/* Initialize a list containing a list item.
+ */
 static inline void
   t_list__ctor_with_list_item(t_list_t *list, s_list_item_t *item);
 
+/* Removes the first item from the list and returns it.
+ */
 s_list_item_t *
   t_list__shift(t_list_t *list);
   
+/* Inserts `item` before the first item in the list. If `item` is connected to
+ * anything that whole chain is inserted.
+ */
 void
   t_list__unshift(t_list_t *list, s_list_item_t *item);
 
+/* Inserts `item` after the last item in the list. If `item` is connected to
+ * anything that whole chain is inserted..
+ */
 void
   t_list__push(t_list_t *list, s_list_item_t *item);
 
+/* Removes `item` from the list if it is included. Returns non zero if the item
+ * was found and could be removed.
+ */
 bool_t
   t_list__delete(t_list_t *t_list_t, s_list_item_t *item);
 
@@ -57,25 +70,48 @@ void
 void
   t_list__push_list(t_list_t *list, t_list_t other);
 
+/* Returns the number if items in the list.
+ */
 static inline size_t
   t_list__length(t_list_t const *list);
   
+/* Insert `item` before the first item in the list for which `handler` returns
+ * non zero, given the two items as arguments. See `s_list__insert_handler_t`
+ * for the function signature.
+ */
 static inline void
   t_list__insert_ordered(t_list_t *list, s_list_item_t *item,
                          s_list__insert_handler_t handler);
-                         
+
+/* Returns non zero if the list includes `item`.
+ */
 static inline bool_t
   t_list__include(t_list_t const *list, s_list_item_t const *item);
   
+/* Return non zero if the list contains no items.
+ */
 static inline bool_t
   t_list__is_empty(t_list_t const *list);
-  
+ 
+/* Return the first item in the list.
+ */
 static inline s_list_item_t *
   t_list__first(t_list_t const *list);
   
+/* Return the last item in the list.
+ */
 static inline s_list_item_t *
   t_list__last(t_list_t const *list);
 
+/* Debug function for inspecting the contents of a list. Defining NDEBUG removes
+ * this function completely.
+ */
+#ifndef NDEBUG
+static inline void
+  t_list__inspect(t_list_t const *list);
+#else
+#define t_list__inspect(list)
+#endif
 
 /* Macros ----------------------------------------+--------+----------------- */
 
@@ -86,6 +122,9 @@ static inline s_list_item_t *
 
 void t_list__ctor_with_list_item(t_list_t *list, s_list_item_t *item)
 {
+  assert(list != NULL);
+  assert(item != NULL);
+  
   s_list_item_t *tail = s_list_item__last(item);
   s_list__ctor_with_list_item(&list->_super, item);
   list->tail = tail;
@@ -106,9 +145,6 @@ s_list_item_t *t_list__last(t_list_t const *list)
   return list->tail;
 }
 
-/* Returns true it the list includes the given item.
- */
- 
 bool_t t_list__include(t_list_t const *list, s_list_item_t const *item)
 {
   return s_list__include(&list->_super, item);
@@ -118,10 +154,6 @@ size_t t_list__length(t_list_t const *list)
 {
   return s_list__length(&list->_super);
 }
-
-
-/* Insert a single item into the list acorording to the output of the given insert handler. The list item will be inserted before the first item for which the handler returns non-zero.
- */
  
 void t_list__insert_ordered(t_list_t *list, s_list_item_t *item,
                             s_list__insert_handler_t handler)
@@ -132,5 +164,12 @@ void t_list__insert_ordered(t_list_t *list, s_list_item_t *item,
     list->tail = item;
   }
 }
+
+#ifndef NDEBUG
+void t_list__inspect(t_list_t const *list)
+{
+  s_list__inspect(&list->_super);
+}
+#endif
 
 #endif /* T_LIST_H */
