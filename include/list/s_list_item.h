@@ -20,9 +20,10 @@ void
 
 /* Insert a list item between `item` and the item directly following it. If
  * `other` is connected to anything that whole chain will be inserted, with the
- * last item linking to item after `item`.
+ * last item linking to item after `item`. The last item connected to other is
+ * returned.
  */
-void
+s_list_item_t *
   s_list_item__append(s_list_item_t *item, s_list_item_t *other);
 
 /* Insert a single list item between `item` and the item directly following it.
@@ -35,7 +36,7 @@ void
  * is connected to anything that whole chain will be inserted, with the last
  * item linking to `item`.
  */
-void
+s_list_item_t *
   s_list_item__prepend(s_list_item_t *item, s_list_item_t *other);
 
 /* Insert a single list item between `item` and the item directly before it. Use

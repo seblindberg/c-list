@@ -19,17 +19,18 @@ void s_list_item__ctor(s_list_item_t *item)
  * and the next.
  */
 
-void s_list_item__append(s_list_item_t *item, s_list_item_t *first)
+s_list_item_t *s_list_item__append(s_list_item_t *item, s_list_item_t *other)
 {
   /* Check parameters */
   assert(item  != NULL);
-  assert(first != NULL);
+  assert(other != NULL);
   
-  s_list_item_t *next = item->next;
-  s_list_item_t *last = s_list_item__last(first);
-    
-  item->next = first;
-  last->next = next;
+  s_list_item_t *other_last = s_list_item__last(other);
+  
+  other_last->next = item->next;
+  item->next = other;
+  
+  return other_last;
 }
 
 /* Append a single list item to this one. Use this function over
@@ -55,17 +56,19 @@ void s_list_item__append_single(s_list_item_t *item, s_list_item_t *other)
  * will be spliced in between this item and the next.
  */
 
-void s_list_item__prepend(s_list_item_t *item, s_list_item_t *first)
+s_list_item_t *s_list_item__prepend(s_list_item_t *item, s_list_item_t *other)
 {
-  s_list_item_t *last;
+  s_list_item_t *other_last;
   
   /* Check parameters */
   assert(item != NULL);
-  assert(first != NULL);
+  assert(other != NULL);
   
-  last = s_list_item__last(first);
+  other_last = s_list_item__last(other);
   
-  last->next = item;
+  other_last->next = item;
+  
+  return other_last;
 }
 
 void s_list_item__prepend_single(s_list_item_t *item, s_list_item_t *first)

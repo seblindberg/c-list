@@ -29,25 +29,42 @@ void d_list_item__prepend(d_list_item_t *item, d_list_item_t *other)
   
   assert(item != NULL);
   assert(other != NULL);
+    
+  other_last = (d_list_item_t *)
+    s_list_item__prepend(&item->_super, &other->_super);
   
-  other_last = d_list_item__last(other);
-  
-  
-  /* We need to consider two cases:
-   * 1. This item is the current head, so the list will
-   *    need to be updated.
-   * 2. This item is not the head. */
-  // if (d_list_item__is_first(list_item)) {
-  //   if (list != NULL) {
-  //     list->first = other_item;
-  //   }
-  // }
+  other->prev = item->prev;
+  item->prev  = other_last;
 }
 
 void d_list_item__append(d_list_item_t *item, d_list_item_t *other)
 {
+  d_list_item_t *other_last;
+  d_list_item_t *item_first;
+  
   assert(item != NULL);
   assert(other != NULL);
+  
+  /* If item is currently the last one in the chain we need
+     a reference to the first item. */
+  if (d_list_item__is_last(item)) {
+    item_first = d_list_item__first(item);
+  } else {
+    item_first = NULL;
+  }
+  
+  other_last = (d_list_item_t *)
+    s_list_item__append(&item->_super, &other->_super);
+  
+  other_last->prev = item;
+  
+  if (item_first != NULL) {
+    item_first->prev = other_last;
+  } else {
+    d_list_item__next(item)->prev = other_last;
+  }
+  
+  
   
   // // Make sure that the list item does not already belong to
   // // a list as this operation would corrupt that it.
