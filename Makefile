@@ -1,17 +1,17 @@
-CC = gcc
-MKDIR_P = mkdir -p
+CC ?= gcc
+MKDIR_P ?= mkdir -p
 
 # Library name
 LIBRARY_NAME = list
 
 # Configure directories
-SRC_DIR  = src
-INC_DIR  = include
-OBJ_DIR  = obj
-LIB_DIR  = lib
-BLD_DIR  = build
-TST_DIR  = tests
-TST_DEPS = helper
+SRC_DIR  ?= src
+INC_DIR  ?= include
+OBJ_DIR  ?= obj
+LIB_DIR  ?= lib
+BLD_DIR  ?= build
+TST_DIR  ?= tests
+TST_DEPS ?= helper
 
 LIBRARY  = $(LIB_DIR)/lib$(LIBRARY_NAME).a
 HEADERS  = $(wildcard $(INC_DIR)/*.h)
