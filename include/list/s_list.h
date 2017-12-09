@@ -92,11 +92,11 @@ void
   NONNULL;
 
 void
-  s_list__unshift_list(s_list_t *list, s_list_t other)
+  s_list__unshift_list(s_list_t *list, s_list_t *other)
   NONNULL;
   
 void
-  s_list__push_list(s_list_t *list, s_list_t other)
+  s_list__push_list(s_list_t *list, s_list_t *other)
   NONNULL;
 
 /* Return non zero if the list contains no items.
