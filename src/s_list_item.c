@@ -7,24 +7,18 @@
 
 /* Public Function Definitions ---------------------------------------------- */
 
-void s_list_item__ctor(s_list_item_t *item)
+void
+s_list_item__ctor(s_list_item_t *item)
 {
-  /* Check parameters */
-  assert(item != NULL);
-  
   item->next = NULL;
 }
 
 /* Append one or more list items to this one. It will be linked in between this
  * and the next.
  */
-
-s_list_item_t *s_list_item__append(s_list_item_t *item, s_list_item_t *other)
+s_list_item_t *
+s_list_item__append(s_list_item_t *item, s_list_item_t *other)
 {
-  /* Check parameters */
-  assert(item  != NULL);
-  assert(other != NULL);
-  
   s_list_item_t *other_last = s_list_item__last(other);
   
   other_last->next = item->next;
@@ -36,14 +30,12 @@ s_list_item_t *s_list_item__append(s_list_item_t *item, s_list_item_t *other)
 /* Append a single list item to this one. Use this function over
  * s_list_item__append for its performance.
  */
- 
-void s_list_item__append_single(s_list_item_t *item, s_list_item_t *other)
+void
+s_list_item__append_single(s_list_item_t *item, s_list_item_t *other)
 {
   s_list_item_t *next;
   
   /* Check parameters */
-  assert(item != NULL);
-  assert(other != NULL);
   assert(other->next == NULL);
   
   next        = item->next;
@@ -55,14 +47,10 @@ void s_list_item__append_single(s_list_item_t *item, s_list_item_t *other)
  * equivalent to an append with the arguments reversed. Longer chains of items
  * will be spliced in between this item and the next.
  */
-
-s_list_item_t *s_list_item__prepend(s_list_item_t *item, s_list_item_t *other)
+s_list_item_t *
+s_list_item__prepend(s_list_item_t *item, s_list_item_t *other)
 {
   s_list_item_t *other_last;
-  
-  /* Check parameters */
-  assert(item != NULL);
-  assert(other != NULL);
   
   other_last = s_list_item__last(other);
   
@@ -71,11 +59,10 @@ s_list_item_t *s_list_item__prepend(s_list_item_t *item, s_list_item_t *other)
   return other_last;
 }
 
-void s_list_item__prepend_single(s_list_item_t *item, s_list_item_t *first)
+void
+s_list_item__prepend_single(s_list_item_t *item, s_list_item_t *first)
 {
   /* Check parameters */
-  assert(item != NULL);
-  assert(first != NULL);
   assert(first->next == NULL);
   
   first->next = item;
@@ -84,12 +71,10 @@ void s_list_item__prepend_single(s_list_item_t *item, s_list_item_t *first)
 /* Return the last list item in the chain of items connected to the given one.
  */
  
-s_list_item_t *s_list_item__last(s_list_item_t const *item)
+s_list_item_t *
+s_list_item__last(s_list_item_t const *item)
 {
   s_list_item_t const *next;
-  
-  /* Check parameters */
-  assert(item != NULL);
   
   for (;;) {
     next = item->next;

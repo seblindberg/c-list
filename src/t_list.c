@@ -5,14 +5,16 @@
 
 /* Private Functions -------------------------------------------------------- */
 
-static inline void delete(t_list_t *list, s_list_item_t *prev, s_list_item_t *item);
+static inline void
+  delete(t_list_t *list, s_list_item_t *prev, s_list_item_t *item);
 
 
 /* Public Function Definitions ---------------------------------------------- */
 
 /* Setup an empty list.
  */
-void t_list__ctor(t_list_t *list)
+void
+t_list__ctor(t_list_t *list)
 {
   s_list__ctor(&list->_super);
   list->tail = NULL;
@@ -20,7 +22,8 @@ void t_list__ctor(t_list_t *list)
 
 /* Remove the first item from the list and return it.
  */
-s_list_item_t *t_list__shift(t_list_t *list)
+s_list_item_t *
+t_list__shift(t_list_t *list)
 {
   s_list_item_t *head = s_list__shift(&list->_super);
   
@@ -37,7 +40,8 @@ s_list_item_t *t_list__shift(t_list_t *list)
 
 /* Put a new list item at the head of the list.
  */
-void t_list__unshift(t_list_t *list, s_list_item_t *item)
+void
+t_list__unshift(t_list_t *list, s_list_item_t *item)
 {
   if (s_list__is_empty(&list->_super)) {
     t_list__ctor_with_list_item(list, item);
@@ -50,7 +54,8 @@ void t_list__unshift(t_list_t *list, s_list_item_t *item)
 
 /* Put a new list item at the tail of the list.
  */
-void t_list__push(t_list_t *list, s_list_item_t *item)
+void
+t_list__push(t_list_t *list, s_list_item_t *item)
 {
   s_list_item_t *tail = list->tail;
   
@@ -67,7 +72,8 @@ void t_list__push(t_list_t *list, s_list_item_t *item)
 /* Removes an item from the list. Returns non-zero if the item was found in the
  * list.
  */
-bool_t t_list__delete(t_list_t *list, s_list_item_t *item)
+bool_t
+t_list__delete(t_list_t *list, s_list_item_t *item)
 {
   s_list_item_t *prev_item;
   s_list_item_t *list_item = s_list__first(&list->_super);
@@ -102,7 +108,8 @@ bool_t t_list__delete(t_list_t *list, s_list_item_t *item)
 
 /* Delete an item in the list that is not the first one.
  */
-void delete(t_list_t *list, s_list_item_t *prev, s_list_item_t *item)
+void
+delete(t_list_t *list, s_list_item_t *prev, s_list_item_t *item)
 {
   prev->next = item->next;
 

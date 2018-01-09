@@ -136,22 +136,26 @@ void
 
 /* Inline Function Definitions ---------------------------------------------- */
 
-void s_list__ctor_with_list_item(s_list_t *list, s_list_item_t *item)
+void
+s_list__ctor_with_list_item(s_list_t *list, s_list_item_t *item)
 {
   list->head = item;
 }
 
-bool_t s_list__is_empty(s_list_t const *list)
+bool_t
+s_list__is_empty(s_list_t const *list)
 {
   return list->head == NULL;
 }
 
-s_list_item_t *s_list__first(s_list_t const *list)
+s_list_item_t *
+s_list__first(s_list_t const *list)
 {
   return list->head;
 }
 
-s_list_item_t *s_list__last(s_list_t const *list)
+s_list_item_t *
+s_list__last(s_list_t const *list)
 {
   if (list->head == NULL) {
     return NULL;

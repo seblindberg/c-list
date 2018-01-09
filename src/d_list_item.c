@@ -11,10 +11,9 @@ static inline void
 /* Initialize a new list item.
  */
 
-void d_list_item__ctor(d_list_item_t *item)
+void
+d_list_item__ctor(d_list_item_t *item)
 {
-  assert(item != NULL);
-  
   s_list_item__ctor(&item->_super);
   item->prev = item;
 }
@@ -23,13 +22,11 @@ void d_list_item__ctor(d_list_item_t *item)
  *
  */
 
-void d_list_item__prepend(d_list_item_t *item, d_list_item_t *other)
+void
+d_list_item__prepend(d_list_item_t *item, d_list_item_t *other)
 {
   d_list_item_t *other_last;
-  
-  assert(item != NULL);
-  assert(other != NULL);
-    
+      
   other_last = (d_list_item_t *)
     s_list_item__prepend(&item->_super, &other->_super);
   
@@ -37,13 +34,11 @@ void d_list_item__prepend(d_list_item_t *item, d_list_item_t *other)
   item->prev  = other_last;
 }
 
-void d_list_item__append(d_list_item_t *item, d_list_item_t *other)
+void
+d_list_item__append(d_list_item_t *item, d_list_item_t *other)
 {
   d_list_item_t *other_last;
   d_list_item_t *item_first;
-  
-  assert(item != NULL);
-  assert(other != NULL);
   
   /* If item is currently the last one in the chain we need
      a reference to the first item. */
@@ -97,14 +92,13 @@ void d_list_item__append(d_list_item_t *item, d_list_item_t *other)
 /* Delete the list item. This action is efficient for all but the last item.
  */
  
-void d_list_item__delete(d_list_item_t *item)
+void
+d_list_item__delete(d_list_item_t *item)
 {
   d_list_item_t *prev;
   d_list_item_t *next;
   d_list_item_t *first;
-  
-  assert(item != NULL);
-  
+    
   prev = d_list_item__prev(item);
   next = d_list_item__next(item);
   
@@ -177,10 +171,10 @@ void d_list_item__delete(d_list_item_t *item)
 //   list_item__ctor(list_item);
 }
 
-d_list_item_t *d_list_item__first(d_list_item_t const *item)
+d_list_item_t *
+d_list_item__first(d_list_item_t const *item)
 {
   d_list_item_t const *prev;
-  assert(item != NULL);
   
   for (;;)
   {
@@ -197,7 +191,8 @@ d_list_item_t *d_list_item__first(d_list_item_t const *item)
 }
 
 
-void set_next(d_list_item_t *item, d_list_item_t *next)
+void
+set_next(d_list_item_t *item, d_list_item_t *next)
 {
   item->_super.next = (s_list_item_t *) next;
 }
