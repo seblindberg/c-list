@@ -1,4 +1,5 @@
-CC ?= gcc
+CC      ?= gcc
+AR      ?= ar
 MKDIR_P ?= mkdir -p
 
 # Library name
